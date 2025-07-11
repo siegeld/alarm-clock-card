@@ -1,11 +1,11 @@
 const path = require('path');
 
 module.exports = {
-  entry: './index.ts',
+  entry: './src/index.ts',
   mode: 'production',
   output: {
     filename: 'alarm-clock-card.js',
-    path: path.resolve(__dirname, '../dist'),
+    path: path.resolve(__dirname, 'dist'),
     clean: true,
   },
   module: {
