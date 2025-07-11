@@ -1,6 +1,6 @@
 # 🕐 Alarm Clock Card
 
-A beautiful, interactive Lovelace card for the [Alarm Clock Integration](https://github.com/your-username/alarm-clock) in Home Assistant.
+A beautiful, interactive Lovelace card for the [Alarm Clock Integration](https://github.com/siegeld/alarm-clock) in Home Assistant.
 
 [![hacs][hacsbadge]][hacs]
 [![GitHub Release][releases-shield]][releases]
@@ -20,7 +20,7 @@ A beautiful, interactive Lovelace card for the [Alarm Clock Integration](https:/
 
 ## 📋 Prerequisites
 
-This card requires the [Alarm Clock Integration](https://github.com/your-username/alarm-clock) to be installed and configured in Home Assistant.
+This card requires the [Alarm Clock Integration](https://github.com/siegeld/alarm-clock) to be installed and configured in Home Assistant.
 
 ## 🚀 Installation
 
