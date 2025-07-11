@@ -213,7 +213,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🏆 Acknowledgments
 
-- [Alarm Clock Integration](https://github.com/your-username/alarm-clock) - The integration this card is built for
+- [Alarm Clock Integration](https://github.com/siegeld/alarm-clock) - The integration this card is built for
 - Home Assistant community for inspiration and support
 - HACS for making installation seamless
 
@@ -223,6 +223,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 [hacs]: https://github.com/hacs/integration
 [hacsbadge]: https://img.shields.io/badge/HACS-Custom-orange.svg
-[releases-shield]: https://img.shields.io/github/release/your-username/alarm-clock-card.svg
-[releases]: https://github.com/your-username/alarm-clock-card/releases
-[license-shield]: https://img.shields.io/github/license/your-username/alarm-clock-card.svg
+[releases-shield]: https://img.shields.io/github/release/siegeld-username/alarm-clock-card.svg
+[releases]: https://github.com/siegeld/alarm-clock-card/releases
+[license-shield]: https://img.shields.io/github/license/siegeld/alarm-clock-card.svg
