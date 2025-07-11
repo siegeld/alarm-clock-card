@@ -213,7 +213,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🏆 Acknowledgments
 
-- [Alarm Clock Integration](https://github.com/siegeld/alarm-clock) - The integration this card is built for
+- [Alarm Clock Integration](https://github.com/siegeld/alarm-clock) - The integration this card requires
 - Home Assistant community for inspiration and support
 - HACS for making installation seamless
 
