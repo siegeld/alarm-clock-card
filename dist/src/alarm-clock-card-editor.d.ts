@@ -17,6 +17,7 @@ export declare class AlarmClockCardEditor extends LitElement implements Lovelace
     get _show_days(): boolean;
     get _show_scripts(): boolean;
     get _show_snooze_info(): boolean;
+    get _use_24_hour_format(): boolean;
     protected render(): TemplateResult;
     private _loadDevices;
     private _handleSearch;

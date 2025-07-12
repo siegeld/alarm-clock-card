@@ -49,6 +49,10 @@ export class AlarmClockCardEditor extends LitElement implements LovelaceCardEdit
     return this._config?.show_snooze_info !== false;
   }
 
+  get _use_24_hour_format(): boolean {
+    return this._config?.use_24_hour_format || false;
+  }
+
   protected render(): TemplateResult {
     if (!this.hass || !this._config) {
       return html``;
@@ -116,6 +120,13 @@ export class AlarmClockCardEditor extends LitElement implements LovelaceCardEdit
             <ha-switch
               .checked=${this._show_snooze_info}
               @change=${(e: Event) => this._toggleChanged('show_snooze_info', e)}
+            ></ha-switch>
+          </ha-formfield>
+          
+          <ha-formfield label="Use 24-hour format">
+            <ha-switch
+              .checked=${this._use_24_hour_format}
+              @change=${(e: Event) => this._toggleChanged('use_24_hour_format', e)}
             ></ha-switch>
           </ha-formfield>
         </div>

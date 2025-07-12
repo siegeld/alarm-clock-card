@@ -5,6 +5,96 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.5] - 2025-07-12
+
+### 🌍 Internationalization
+
+#### Multi-Language Support
+- **German Translation** - Complete German language support (Deutsch)
+- **Spanish Translation** - Complete Spanish language support (Español)
+- **French Translation** - Complete French language support (Français)
+- **Automatic Language Detection** - Uses Home Assistant language settings automatically
+
+### 🎯 Language Features
+
+#### Automatic Detection
+- **Home Assistant Language** - Automatically detects from `hass.language`
+- **User Language Preference** - Falls back to `hass.user.language`
+- **Browser Language** - Uses browser setting if HA language unavailable
+- **English Fallback** - Defaults to English if no supported language detected
+
+#### Translated Elements
+- **All UI Text** - Complete translation of buttons, labels, and messages
+- **Status Messages** - Translated alarm states (OFF/ARMED/RINGING/SNOOZED)
+- **Day Names** - Localized day names and abbreviations
+- **Settings Menu** - Translated 24-hour format option
+- **Time Displays** - Localized time format labels
+
+### 🔧 Technical Implementation
+
+#### Translation System
+- **Embedded Translations** - All languages built into main JavaScript bundle
+- **No External Files** - Works seamlessly with HACS installation
+- **Runtime Detection** - Language determined at card render time
+- **Fallback System** - Graceful fallback to English for missing translations
+
+#### Supported Languages
+- **English** (`en`) - Default language
+- **German** (`de`) - Wecker, Zeit einstellen, Schlummern, etc.
+- **Spanish** (`es`) - Despertador, Establecer hora, Posponer, etc.
+- **French** (`fr`) - Réveil, Définir l'heure, Reporter, etc.
+
+### 📝 Migration Notes
+- **No Configuration Required** - Languages work automatically
+- **Backward Compatible** - Existing installations continue working
+- **HACS Compatible** - Single file deployment with all languages included
+
+---
+
+## [2.0.3] - 2025-07-12
+
+### ✨ New Features
+
+#### 24-Hour Time Format Support
+- **Time Format Options** - Choose between 12-hour (AM/PM) or 24-hour format
+- **Three-Dot Settings Menu** - Runtime configuration via settings menu in card header
+- **Persistent Settings** - Format preference persists across restarts and browser refreshes
+- **Multiple Configuration Methods** - Set via YAML, visual editor, or runtime menu
+
+### 🎯 Configuration Options
+
+#### YAML Configuration
+```yaml
+type: custom:alarm-clock-card
+device_id: your_device_id
+use_24_hour_format: true  # Enable 24-hour format
+```
+
+#### Runtime Settings
+- **Three-Dot Menu** - Click menu icon in card header for instant format toggle
+- **Immediate Updates** - Time format changes instantly without page refresh
+- **Persistent Storage** - Settings saved to dashboard configuration
+
+### 🔧 Technical Details
+
+#### UI Improvements
+- **Clean Interface** - Settings menu keeps card interface uncluttered
+- **Instant Feedback** - Format changes apply immediately
+- **Backward Compatible** - Defaults to 12-hour format for existing installations
+
+#### Multiple Access Methods
+- **YAML Configuration** - Set `use_24_hour_format: true` in dashboard config
+- **Visual Editor** - Toggle in "Display Options" section
+- **Runtime Menu** - Three-dot menu in card header for instant changes
+
+### 📝 Migration Notes
+
+- **No Breaking Changes** - Existing cards continue to use 12-hour format
+- **Optional Feature** - Must be explicitly enabled to use 24-hour format
+- **All Time Displays** - Format applies to alarm time, next alarm, and snooze times
+
+---
+
 ## [1.3.0] - 2025-07-10
 
 ### 🚀 Major Architecture Refactoring

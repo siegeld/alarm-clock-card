@@ -9,6 +9,7 @@ export interface AlarmClockCardConfig extends LovelaceCardConfig {
     show_days?: boolean;
     show_scripts?: boolean;
     show_snooze_info?: boolean;
+    use_24_hour_format?: boolean;
     theme?: string;
     tap_action?: ActionConfig;
     hold_action?: ActionConfig;
@@ -19,6 +20,7 @@ export declare class AlarmClockCard extends LitElement implements LovelaceCard {
     static getStubConfig(): AlarmClockCardConfig;
     hass: HomeAssistant;
     private config;
+    private _showSettingsMenu;
     private entities;
     setConfig(config: AlarmClockCardConfig): void;
     protected shouldUpdate(changedProps: PropertyValues): boolean;
@@ -37,7 +39,13 @@ export declare class AlarmClockCard extends LitElement implements LovelaceCard {
     private _toggleDay;
     private _snoozeAlarm;
     private _dismissAlarm;
+    private _formatTime;
     private _formatTime12Hour;
+    private _toggleSettingsMenu;
+    private _renderSettingsMenu;
+    private _handleSettingsClick;
+    private _toggle24HourFormat;
+    private _handleCardClick;
     getCardSize(): number;
     static get styles(): CSSResultGroup;
 }

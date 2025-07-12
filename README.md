@@ -9,6 +9,7 @@ A beautiful, interactive Lovelace card for the [Alarm Clock Integration](https:/
 ## ✨ Features
 
 - **⏰ Large Time Display** - Clear, easy-to-read alarm time with next alarm information
+- **🕐 Time Format Options** - Choose between 12-hour (AM/PM) or 24-hour format
 - **🎛️ Interactive Time Picker** - Intuitive time selection interface
 - **🔘 Day Toggles** - Quick enable/disable for each day of the week
 - **▶️ Control Buttons** - Snooze and dismiss buttons when alarm is active
@@ -17,6 +18,7 @@ A beautiful, interactive Lovelace card for the [Alarm Clock Integration](https:/
 - **⚙️ Card Editor** - GUI configuration in Lovelace editor
 - **📱 Mobile Responsive** - Works perfectly on all screen sizes
 - **🎨 Real-time Updates** - Live countdown with 1-second precision
+- **⚙️ Runtime Settings** - Three-dot menu for instant configuration changes
 
 ## 📋 Prerequisites
 
@@ -58,6 +60,7 @@ This card requires the [Alarm Clock Integration](https://github.com/siegeld/alar
 type: custom:alarm-clock-card
 entity: alarm_clock.bedroom_alarm
 name: "Bedroom Alarm"
+use_24_hour_format: true  # Optional: Use 24-hour format
 show_time_picker: true
 show_days: true
 show_scripts: true
@@ -70,10 +73,19 @@ show_snooze_info: true
 |--------|------|---------|-------------|
 | `entity` | string | **Required** | Alarm clock entity ID |
 | `name` | string | `"Alarm Clock"` | Card title |
+| `use_24_hour_format` | boolean | `false` | Use 24-hour time format instead of AM/PM |
 | `show_time_picker` | boolean | `true` | Show the time picker input |
 | `show_days` | boolean | `true` | Show day selection buttons |
 | `show_scripts` | boolean | `true` | Show configured scripts info |
 | `show_snooze_info` | boolean | `true` | Show snooze info when snoozed |
+
+## ⚙️ Runtime Settings
+
+### Three-Dot Menu
+Click the three-dot menu (⋮) in the card header to access runtime settings:
+- **Use 24-hour format**: Toggle between 12-hour (2:30 PM) and 24-hour (14:30) time display
+- Settings persist across restarts and browser refreshes
+- Changes apply instantly without page refresh
 
 ## 🎨 Card Sections
 

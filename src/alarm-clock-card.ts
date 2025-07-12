@@ -15,6 +15,8 @@ import type {
   ActionConfig,
 } from 'custom-card-helpers';
 
+import { getTranslations, detectLanguage, Translations } from './translations';
+
 export interface AlarmClockCardConfig extends LovelaceCardConfig {
   type: string;
   device_id: string;
@@ -23,6 +25,7 @@ export interface AlarmClockCardConfig extends LovelaceCardConfig {
   show_days?: boolean;
   show_scripts?: boolean;
   show_snooze_info?: boolean;
+  use_24_hour_format?: boolean;
   theme?: string;
   tap_action?: ActionConfig;
   hold_action?: ActionConfig;
@@ -49,6 +52,7 @@ export class AlarmClockCard extends LitElement implements LovelaceCard {
 
   @property({ attribute: false }) public hass!: HomeAssistant;
   @state() private config!: AlarmClockCardConfig;
+  @state() private _showSettingsMenu = false;
   @state() private entities: {
     main?: any;           // sensor.alarm_clock (main status)
     time?: any;           // time.alarm_clock (alarm time)
@@ -58,6 +62,11 @@ export class AlarmClockCard extends LitElement implements LovelaceCard {
     timeUntil?: any;      // sensor.alarm_clock_time_until_alarm
     days?: {[day: string]: any}; // switch.alarm_clock_monday, etc.
   } = {};
+
+  private get _translations(): Translations {
+    const language = this.hass ? detectLanguage(this.hass) : 'en';
+    return getTranslations(language);
+  }
 
   public setConfig(config: AlarmClockCardConfig): void {
     if (!config.device_id) {
@@ -267,7 +276,7 @@ export class AlarmClockCard extends LitElement implements LovelaceCard {
     const mainEntity = this.entities.main?.entity_id ? this.hass.states[this.entities.main.entity_id] : null;
     
     const alarmTimeRaw = timeEntity?.state || '07:00';
-    const alarmTime = this._formatTime12Hour(alarmTimeRaw);
+    const alarmTime = this._formatTime(alarmTimeRaw);
     const isEnabled = enabledEntity?.state === 'on';
     
     // Get the actual alarm state from main entity (this is authoritative)
@@ -312,23 +321,35 @@ export class AlarmClockCard extends LitElement implements LovelaceCard {
     });
 
     return html`
-      <ha-card>
+      <ha-card @click=${this._handleCardClick}>
         <div class="card-content">
           <div class="header">
-            <div class="title">${this.config.name || 'Alarm Clock'}</div>
-            <div class="status ${status}">${status}</div>
+            <div class="title">${this.config.name || this._translations.card.title}</div>
+            <div class="header-right">
+              <div class="status ${status}">${this._getStatusTranslation(status)}</div>
+              <div class="settings-menu">
+                <button 
+                  class="settings-button"
+                  @click=${this._toggleSettingsMenu}
+                  title="Settings"
+                >
+                  ⋮
+                </button>
+                ${this._showSettingsMenu ? this._renderSettingsMenu() : ''}
+              </div>
+            </div>
           </div>
 
           <div class="time-display">
             <div class="alarm-time">${alarmTime}</div>
             ${nextAlarm && nextAlarmDay
-              ? html`<div class="next-alarm">Next alarm: ${nextAlarmDay} at ${new Date(nextAlarm).toLocaleTimeString()}</div>`
+              ? html`<div class="next-alarm">${this._translations.card.next_alarm}: ${nextAlarmDay} at ${this._formatTime(new Date(nextAlarm).toTimeString().substring(0, 5))}</div>`
               : html``}
             ${timeUntil
               ? html`
                   <div class="countdown">
                     <span class="countdown-label">
-                      ${countdownType === 'snooze' ? 'Snooze ends in:' : 'Alarm in:'}
+                      ${countdownType === 'snooze' ? this._translations.card.snooze_ends_in : this._translations.card.alarm_in}
                     </span>
                     <span class="countdown-time">${timeUntil}</span>
                   </div>
@@ -336,7 +357,7 @@ export class AlarmClockCard extends LitElement implements LovelaceCard {
               : html``}
           </div>
 
-          ${this.config.show_time_picker ? this._renderTimePicker(alarmTime) : html``}
+          ${this.config.show_time_picker ? this._renderTimePicker() : html``}
           ${this._renderControls(isEnabled, status)}
           ${this.config.show_days ? this._renderDays(enabledDays) : html``}
           ${this.config.show_snooze_info && status === 'snoozed' ? this._renderSnoozeInfo() : html``}
@@ -345,7 +366,7 @@ export class AlarmClockCard extends LitElement implements LovelaceCard {
     `;
   }
 
-  private _renderTimePicker(alarmTime: string): TemplateResult {
+  private _renderTimePicker(): TemplateResult {
     // Use raw 24-hour time for the input field
     const alarmTimeRaw = this.entities.time?.state || '07:00';
     
@@ -357,13 +378,15 @@ export class AlarmClockCard extends LitElement implements LovelaceCard {
           id="alarm-time-input"
           .value=${alarmTimeRaw}
           value=${alarmTimeRaw}
+          step="60"
+          lang="en-GB"
           @change=${this._onTimeInputChange}
         />
         <mwc-button
           @click=${this._onSetTimeButtonClick}
           class="set-time-button"
         >
-          Set Time
+          ${this._translations.card.set_time}
         </mwc-button>
       </div>
     `;
@@ -377,7 +400,7 @@ export class AlarmClockCard extends LitElement implements LovelaceCard {
           class="control-button ${isEnabled ? 'danger' : 'primary'}"
           @click=${this._toggleAlarm}
         >
-          ${isEnabled ? 'Disable' : 'Enable'} Alarm
+          ${isEnabled ? this._translations.card.disable_alarm : this._translations.card.enable_alarm}
         </mwc-button>
         ${status === 'ringing'
           ? html`
@@ -386,14 +409,14 @@ export class AlarmClockCard extends LitElement implements LovelaceCard {
                 class="control-button secondary"
                 @click=${this._snoozeAlarm}
               >
-                Snooze
+                ${this._translations.card.snooze}
               </mwc-button>
               <mwc-button
                 raised
                 class="control-button danger"
                 @click=${this._dismissAlarm}
               >
-                Dismiss
+                ${this._translations.card.dismiss}
               </mwc-button>
             `
           : html``}
@@ -403,12 +426,11 @@ export class AlarmClockCard extends LitElement implements LovelaceCard {
 
   private _renderDays(enabledDays: string[]): TemplateResult {
     const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
-    const dayLabels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
     return html`
       <div class="days-grid">
         ${days.map(
-          (day, index) => {
+          (day) => {
             const isActive = enabledDays.includes(day);
 
             return html`
@@ -416,7 +438,7 @@ export class AlarmClockCard extends LitElement implements LovelaceCard {
                 class="day-button ${isActive ? 'active' : ''}"
                 @click=${() => this._toggleDay(day)}
               >
-                ${dayLabels[index]}
+                ${this._translations.days[day as keyof typeof this._translations.days]}
               </mwc-button>
             `;
           }
@@ -474,9 +496,9 @@ export class AlarmClockCard extends LitElement implements LovelaceCard {
     
     return html`
       <div class="snooze-info">
-        <div>Snoozed (${snoozeCount}/${maxSnoozes})</div>
+        <div>${this._translations.card.snoozed} (${snoozeCount}/${maxSnoozes})</div>
         ${snoozeUntil
-          ? html`<div>Until: ${new Date(snoozeUntil).toLocaleTimeString()}</div>`
+          ? html`<div>${this._translations.card.until}: ${this._formatTime(new Date(snoozeUntil).toTimeString().substring(0, 5))}</div>`
           : html``}
       </div>
     `;
@@ -605,6 +627,18 @@ export class AlarmClockCard extends LitElement implements LovelaceCard {
     setTimeout(() => this._refreshEntityStates(), 100);
   }
 
+  private _formatTime(time24: string): string {
+    if (!time24 || time24 === 'off') return time24;
+    
+    // Use 24-hour format if configured
+    if (this.config.use_24_hour_format) {
+      return time24;
+    }
+    
+    // Otherwise use 12-hour format
+    return this._formatTime12Hour(time24);
+  }
+
   private _formatTime12Hour(time24: string): string {
     if (!time24 || time24 === 'off') return time24;
     
@@ -626,6 +660,56 @@ export class AlarmClockCard extends LitElement implements LovelaceCard {
     } catch (error) {
       // If parsing fails, return original time
       return time24;
+    }
+  }
+
+  private _getStatusTranslation(status: string): string {
+    // Safely get status translation with fallback
+    const statusKey = status.toLowerCase() as keyof typeof this._translations.status;
+    return this._translations.status[statusKey] || status.toUpperCase();
+  }
+
+  private _toggleSettingsMenu(): void {
+    this._showSettingsMenu = !this._showSettingsMenu;
+  }
+
+  private _renderSettingsMenu(): TemplateResult {
+    return html`
+      <div class="settings-dropdown" @click=${this._handleSettingsClick}>
+        <label class="settings-option">
+          <input
+            type="checkbox"
+            .checked=${this.config.use_24_hour_format || false}
+            @change=${this._toggle24HourFormat}
+          />
+          ${this._translations.card.use_24_hour_format}
+        </label>
+      </div>
+    `;
+  }
+
+  private _handleSettingsClick(ev: Event): void {
+    // Prevent dropdown from closing when clicking inside
+    ev.stopPropagation();
+  }
+
+  private _toggle24HourFormat(ev: Event): void {
+    const target = ev.target as HTMLInputElement;
+    const use24Hour = target.checked;
+    
+    this.config = {
+      ...this.config,
+      use_24_hour_format: use24Hour,
+    };
+    
+    fireEvent(this, 'config-changed', { config: this.config });
+    this._showSettingsMenu = false;
+  }
+
+  private _handleCardClick(ev: Event): void {
+    // Close settings menu when clicking outside of it
+    if (this._showSettingsMenu && !(ev.target as Element)?.closest('.settings-menu')) {
+      this._showSettingsMenu = false;
     }
   }
 
@@ -668,12 +752,77 @@ export class AlarmClockCard extends LitElement implements LovelaceCard {
         color: var(--primary-text-color);
       }
 
+      .header-right {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
       .status {
         font-size: 14px;
         padding: 4px 12px;
         border-radius: 16px;
         font-weight: 500;
         text-transform: uppercase;
+      }
+
+      .settings-menu {
+        position: relative;
+      }
+
+      .settings-button {
+        background: none;
+        border: none;
+        font-size: 18px;
+        padding: 8px;
+        cursor: pointer;
+        color: var(--secondary-text-color);
+        border-radius: 50%;
+        transition: background-color 0.2s, color 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+      }
+
+      .settings-button:hover {
+        background-color: var(--secondary-background-color);
+        color: var(--primary-text-color);
+      }
+
+      .settings-dropdown {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        background: var(--card-background-color);
+        border: 1px solid var(--divider-color);
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        min-width: 200px;
+        z-index: 1000;
+        padding: 8px;
+      }
+
+      .settings-option {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 12px;
+        cursor: pointer;
+        border-radius: 4px;
+        transition: background-color 0.2s;
+        font-size: 14px;
+        color: var(--primary-text-color);
+      }
+
+      .settings-option:hover {
+        background-color: var(--secondary-background-color);
+      }
+
+      .settings-option input[type="checkbox"] {
+        margin: 0;
+        cursor: pointer;
       }
 
       .status.off {
@@ -904,7 +1053,7 @@ window.customCards.push({
 });
 
 console.info(
-  `%c  ALARM-CLOCK-CARD  %c  Version 2.0.0  `,
+  `%c  ALARM-CLOCK-CARD  %c  Version 2.0.5  `,
   'color: orange; font-weight: bold; background: black',
   'color: white; font-weight: bold; background: dimgray'
 );
