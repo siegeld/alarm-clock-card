@@ -670,8 +670,22 @@ export class AlarmClockCard extends LitElement implements LovelaceCard {
   }
 
   private _getDayTranslation(day: string): string {
-    // Safely get day translation with fallback
-    const dayKey = day.toLowerCase() as keyof typeof this._translations.days;
+    // Map full day names to short day names
+    const dayToShortMap: { [key: string]: string } = {
+      'monday': 'mon',
+      'tuesday': 'tue',
+      'wednesday': 'wed',
+      'thursday': 'thu',
+      'friday': 'fri',
+      'saturday': 'sat',
+      'sunday': 'sun',
+    };
+    
+    // Get the short version of the day
+    const shortDay = dayToShortMap[day.toLowerCase()] || day.toLowerCase();
+    const dayKey = shortDay as keyof typeof this._translations.days;
+    
+    // Return the short day translation with fallback
     return this._translations.days[dayKey] || day.charAt(0).toUpperCase() + day.slice(1);
   }
 
@@ -1059,7 +1073,7 @@ window.customCards.push({
 });
 
 console.info(
-  `%c  ALARM-CLOCK-CARD  %c  Version 2.0.7  `,
+  `%c  ALARM-CLOCK-CARD  %c  Version 2.0.8  `,
   'color: orange; font-weight: bold; background: black',
   'color: white; font-weight: bold; background: dimgray'
 );
