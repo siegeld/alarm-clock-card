@@ -537,7 +537,7 @@ export class AlarmClockCard extends LitElement implements LovelaceCard {
   private _setAlarmTime(time: string): void {
     this._debug('⏰ ALARM CARD: Setting alarm time to:', time);
     if (!time || !this.config.device_id) {
-      console.error('ALARM CARD: Cannot set time - missing time or device_id:', { time, device_id: this.config.device_id });
+      this._debugError('ALARM CARD: Cannot set time - missing time or device_id:', { time, device_id: this.config.device_id });
       return;
     }
 
@@ -558,7 +558,7 @@ export class AlarmClockCard extends LitElement implements LovelaceCard {
   private _toggleAlarm(): void {
     this._debug('🔘 ALARM CARD: Toggle alarm button clicked');
     if (!this.config.device_id || !this.hass) {
-      console.error('ALARM CARD: Cannot toggle alarm - no device_id found');
+      this._debugError('ALARM CARD: Cannot toggle alarm - no device_id found');
       return;
     }
 
@@ -582,13 +582,13 @@ export class AlarmClockCard extends LitElement implements LovelaceCard {
   private async _toggleDay(day: string): Promise<void> {
     this._debug('📅 ALARM CARD: Toggle day clicked:', day);
     if (!this.config.device_id) {
-      console.error('ALARM CARD: Cannot toggle day - no device_id found:', day);
+      this._debugError('ALARM CARD: Cannot toggle day - no device_id found:', day);
       return;
     }
 
     const dayEntity = this.entities.days?.[day];
     if (!dayEntity) {
-      console.error('ALARM CARD: Cannot toggle day - no day entity found:', day);
+      this._debugError('ALARM CARD: Cannot toggle day - no day entity found:', day);
       return;
     }
 
@@ -614,7 +614,7 @@ export class AlarmClockCard extends LitElement implements LovelaceCard {
   private _snoozeAlarm(): void {
     this._debug('💤 ALARM CARD: Snooze button clicked');
     if (!this.config.device_id) {
-      console.error('ALARM CARD: Cannot snooze - no device_id found');
+      this._debugError('ALARM CARD: Cannot snooze - no device_id found');
       return;
     }
 
@@ -630,7 +630,7 @@ export class AlarmClockCard extends LitElement implements LovelaceCard {
   private _dismissAlarm(): void {
     this._debug('🛑 ALARM CARD: Dismiss button clicked');
     if (!this.config.device_id) {
-      console.error('ALARM CARD: Cannot dismiss - no device_id found');
+      this._debugError('ALARM CARD: Cannot dismiss - no device_id found');
       return;
     }
 
@@ -986,10 +986,12 @@ export class AlarmClockCard extends LitElement implements LovelaceCard {
       }
 
       .day-button {
-        --mdc-theme-primary: rgba(255, 255, 255, 0.1);
+        --mdc-theme-primary: rgba(255, 255, 255, 0.3);
         --mdc-theme-on-primary: #ffffff;
         --mdc-button-outline-width: 0 !important;
         --mdc-outlined-button-outline-width: 0 !important;
+        background: rgba(255, 255, 255, 0.15) !important;
+        color: #ffffff !important;
         border: none !important;
         outline: none !important;
         min-width: 40px;
@@ -1120,7 +1122,7 @@ window.customCards.push({
 });
 
 console.info(
-  `%c  ALARM-CLOCK-CARD  %c  Version 2.0.13  `,
+  `%c  ALARM-CLOCK-CARD  %c  Version 2.0.15  `,
   'color: orange; font-weight: bold; background: black',
   'color: white; font-weight: bold; background: dimgray'
 );
