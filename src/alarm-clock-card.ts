@@ -450,12 +450,12 @@ export class AlarmClockCard extends LitElement implements LovelaceCard {
             const isActive = enabledDays.includes(day);
 
             return html`
-              <mwc-button
+              <button
                 class="day-button ${isActive ? 'active' : ''}"
                 @click=${() => this._toggleDay(day)}
               >
                 ${this._getDayTranslation(day)}
-              </mwc-button>
+              </button>
             `;
           }
         )}
@@ -986,51 +986,37 @@ export class AlarmClockCard extends LitElement implements LovelaceCard {
       }
 
       .day-button {
-        --mdc-theme-primary: rgba(255, 255, 255, 0.3);
-        --mdc-theme-on-primary: #ffffff;
-        --mdc-button-outline-width: 0 !important;
-        --mdc-outlined-button-outline-width: 0 !important;
-        --mdc-button-outline-color: transparent !important;
-        --mdc-outlined-button-outline-color: transparent !important;
-        --mdc-button-disabled-outline-color: transparent !important;
-        --mdc-protected-button-container-color: rgba(255, 255, 255, 0.15) !important;
-        --mdc-filled-button-container-color: rgba(255, 255, 255, 0.15) !important;
-        --mdc-outlined-button-container-color: rgba(255, 255, 255, 0.15) !important;
-        --mdc-text-button-container-color: rgba(255, 255, 255, 0.15) !important;
-        background: rgba(255, 255, 255, 0.15) !important;
-        color: #ffffff !important;
-        border: none !important;
-        outline: none !important;
-        box-shadow: none !important;
+        background: rgba(255, 255, 255, 0.15);
+        color: #ffffff;
+        border: none;
+        outline: none;
+        box-shadow: none;
         min-width: 40px;
         flex: 1;
         max-width: calc((100% - 30px) / 7);
         height: 36px;
         font-size: 11px;
         font-weight: 500;
-        border-radius: 8px !important;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-family: inherit;
+      }
+
+      .day-button:hover {
+        background: rgba(255, 255, 255, 0.25);
+        transform: translateY(-1px);
       }
 
       .day-button.active {
-        --mdc-theme-primary: #ff9800;
-        --mdc-theme-on-primary: #ffffff;
-        --mdc-protected-button-container-color: #ff9800 !important;
-        --mdc-filled-button-container-color: #ff9800 !important;
-        --mdc-outlined-button-container-color: #ff9800 !important;
-        --mdc-text-button-container-color: #ff9800 !important;
-        background: #ff9800 !important;
-        color: #ffffff !important;
-        border: none !important;
-        outline: none !important;
-        box-shadow: none !important;
+        background: #ff9800;
+        color: #ffffff;
+        box-shadow: 0 2px 4px rgba(255, 152, 0, 0.3);
       }
 
-      .day-button::part(button),
-      .day-button::part(label),
-      .day-button::part(outline) {
-        border: none !important;
-        outline: none !important;
-        box-shadow: none !important;
+      .day-button.active:hover {
+        background: #e68900;
+        transform: translateY(-1px);
       }
 
       .scripts-info {
@@ -1123,7 +1109,7 @@ window.customCards.push({
 });
 
 console.info(
-  `%c  ALARM-CLOCK-CARD  %c  Version 2.0.16  `,
+  `%c  ALARM-CLOCK-CARD  %c  Version 2.0.17  `,
   'color: orange; font-weight: bold; background: black',
   'color: white; font-weight: bold; background: dimgray'
 );
