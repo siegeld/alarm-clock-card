@@ -988,7 +988,7 @@ export class AlarmClockCard extends LitElement implements LovelaceCard {
       .day-button {
         --mdc-theme-primary: rgba(255, 255, 255, 0.1);
         --mdc-theme-on-primary: #ffffff;
-        border: 1px solid rgba(255, 255, 255, 0.3) !important;
+        border: none !important;
         min-width: 40px;
         flex: 1;
         max-width: calc((100% - 30px) / 7);
@@ -997,6 +997,7 @@ export class AlarmClockCard extends LitElement implements LovelaceCard {
         padding: 0 6px;
         box-sizing: border-box;
         font-weight: 500;
+        border-radius: 8px !important;
       }
 
       .day-button.active {
@@ -1004,7 +1005,7 @@ export class AlarmClockCard extends LitElement implements LovelaceCard {
         --mdc-theme-on-primary: #ffffff;
         background: #ff9800 !important;
         color: #ffffff !important;
-        border: 1px solid #ff9800 !important;
+        border: none !important;
       }
 
       .scripts-info {
@@ -1097,7 +1098,7 @@ window.customCards.push({
 });
 
 console.info(
-  `%c  ALARM-CLOCK-CARD  %c  Version 2.0.11  `,
+  `%c  ALARM-CLOCK-CARD  %c  Version 2.0.12  `,
   'color: orange; font-weight: bold; background: black',
   'color: white; font-weight: bold; background: dimgray'
 );

@@ -360,7 +360,7 @@
       .day-button {
         --mdc-theme-primary: rgba(255, 255, 255, 0.1);
         --mdc-theme-on-primary: #ffffff;
-        border: 1px solid rgba(255, 255, 255, 0.3) !important;
+        border: none !important;
         min-width: 40px;
         flex: 1;
         max-width: calc((100% - 30px) / 7);
@@ -369,6 +369,7 @@
         padding: 0 6px;
         box-sizing: border-box;
         font-weight: 500;
+        border-radius: 8px !important;
       }
 
       .day-button.active {
@@ -376,7 +377,7 @@
         --mdc-theme-on-primary: #ffffff;
         background: #ff9800 !important;
         color: #ffffff !important;
-        border: 1px solid #ff9800 !important;
+        border: none !important;
       }
 
       .scripts-info {
@@ -448,7 +449,7 @@
           text-align: left;
         }
       }
-    `}};gt([dt({attribute:!1})],ft.prototype,"hass",void 0),gt([lt()],ft.prototype,"config",void 0),gt([lt()],ft.prototype,"_showSettingsMenu",void 0),gt([lt()],ft.prototype,"entities",void 0),ft=gt([at("alarm-clock-card")],ft),window.customCards=window.customCards||[],window.customCards.push({type:"alarm-clock-card",name:"Alarm Clock Card",description:"A card for displaying and controlling alarm clock entities",preview:!0,documentationURL:"https://github.com/siegeld/alarm-clock"}),console.info("%c  ALARM-CLOCK-CARD  %c  Version 2.0.11  ","color: orange; font-weight: bold; background: black","color: white; font-weight: bold; background: dimgray");var yt=function(t,e,i,s){var n,o=arguments.length,a=o<3?e:null===s?s=Object.getOwnPropertyDescriptor(e,i):s;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)a=Reflect.decorate(t,e,i,s);else for(var r=t.length-1;r>=0;r--)(n=t[r])&&(a=(o<3?n(a):o>3?n(e,i,a):n(e,i))||a);return o>3&&a&&Object.defineProperty(e,i,a),a};let vt=class extends nt{constructor(){super(...arguments),this._searchValue="",this._showDropdown=!1,this._filteredDevices=[],this._allDevices=[]}setConfig(t){this._config=t}get _device_id(){return this._config?.device_id||""}get _name(){return this._config?.name||""}get _show_time_picker(){return!1!==this._config?.show_time_picker}get _show_days(){return!1!==this._config?.show_days}get _show_scripts(){return!1!==this._config?.show_scripts}get _show_snooze_info(){return!1!==this._config?.show_snooze_info}get _use_24_hour_format(){return this._config?.use_24_hour_format||!1}render(){return this.hass&&this._config?N`
+    `}};gt([dt({attribute:!1})],ft.prototype,"hass",void 0),gt([lt()],ft.prototype,"config",void 0),gt([lt()],ft.prototype,"_showSettingsMenu",void 0),gt([lt()],ft.prototype,"entities",void 0),ft=gt([at("alarm-clock-card")],ft),window.customCards=window.customCards||[],window.customCards.push({type:"alarm-clock-card",name:"Alarm Clock Card",description:"A card for displaying and controlling alarm clock entities",preview:!0,documentationURL:"https://github.com/siegeld/alarm-clock"}),console.info("%c  ALARM-CLOCK-CARD  %c  Version 2.0.12  ","color: orange; font-weight: bold; background: black","color: white; font-weight: bold; background: dimgray");var yt=function(t,e,i,s){var n,o=arguments.length,a=o<3?e:null===s?s=Object.getOwnPropertyDescriptor(e,i):s;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)a=Reflect.decorate(t,e,i,s);else for(var r=t.length-1;r>=0;r--)(n=t[r])&&(a=(o<3?n(a):o>3?n(e,i,a):n(e,i))||a);return o>3&&a&&Object.defineProperty(e,i,a),a};let vt=class extends nt{constructor(){super(...arguments),this._searchValue="",this._showDropdown=!1,this._filteredDevices=[],this._allDevices=[]}setConfig(t){this._config=t}get _device_id(){return this._config?.device_id||""}get _name(){return this._config?.name||""}get _show_time_picker(){return!1!==this._config?.show_time_picker}get _show_days(){return!1!==this._config?.show_days}get _show_scripts(){return!1!==this._config?.show_scripts}get _show_snooze_info(){return!1!==this._config?.show_snooze_info}get _use_24_hour_format(){return this._config?.use_24_hour_format||!1}render(){return this.hass&&this._config?N`
       <div class="card-config">
         <div class="option">
           <label>Alarm Clock Device (Required)</label>
