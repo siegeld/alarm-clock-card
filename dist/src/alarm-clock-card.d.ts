@@ -10,6 +10,7 @@ export interface AlarmClockCardConfig extends LovelaceCardConfig {
     show_scripts?: boolean;
     show_snooze_info?: boolean;
     use_24_hour_format?: boolean;
+    debug?: boolean;
     theme?: string;
     tap_action?: ActionConfig;
     hold_action?: ActionConfig;
@@ -23,6 +24,8 @@ export declare class AlarmClockCard extends LitElement implements LovelaceCard {
     private _showSettingsMenu;
     private entities;
     private get _translations();
+    private _debug;
+    private _debugError;
     setConfig(config: AlarmClockCardConfig): void;
     protected shouldUpdate(changedProps: PropertyValues): boolean;
     private _refreshEntityStates;
