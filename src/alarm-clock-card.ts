@@ -333,7 +333,7 @@ export class AlarmClockCard extends LitElement implements LovelaceCard {
                   @click=${this._toggleSettingsMenu}
                   title="Settings"
                 >
-                  ⋮
+                  •••
                 </button>
                 ${this._showSettingsMenu ? this._renderSettingsMenu() : ''}
               </div>
@@ -791,26 +791,27 @@ export class AlarmClockCard extends LitElement implements LovelaceCard {
       }
 
       .settings-button {
-        background: none;
-        border: none;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.3);
         font-size: 18px;
         padding: 8px;
         cursor: pointer;
-        color: var(--primary-text-color);
+        color: #ffffff;
         border-radius: 50%;
-        transition: background-color 0.2s, color 0.2s;
+        transition: all 0.2s;
         display: flex;
         align-items: center;
         justify-content: center;
         width: 32px;
         height: 32px;
-        opacity: 0.7;
+        opacity: 0.8;
       }
 
       .settings-button:hover {
-        background-color: var(--secondary-background-color);
-        color: var(--primary-text-color);
+        background: rgba(255, 255, 255, 0.2);
+        color: #ffffff;
         opacity: 1;
+        transform: scale(1.05);
       }
 
       .settings-dropdown {
@@ -969,20 +970,25 @@ export class AlarmClockCard extends LitElement implements LovelaceCard {
       }
 
       .day-button {
-        --mdc-theme-primary: var(--secondary-background-color);
-        --mdc-theme-on-primary: var(--secondary-text-color);
-        min-width: 32px;
+        --mdc-theme-primary: rgba(255, 255, 255, 0.1);
+        --mdc-theme-on-primary: #ffffff;
+        border: 1px solid rgba(255, 255, 255, 0.3) !important;
+        min-width: 40px;
         flex: 1;
-        max-width: calc((100% - 24px) / 7);
-        height: 32px;
-        font-size: 10px;
-        padding: 0 4px;
+        max-width: calc((100% - 30px) / 7);
+        height: 36px;
+        font-size: 11px;
+        padding: 0 6px;
         box-sizing: border-box;
+        font-weight: 500;
       }
 
       .day-button.active {
-        --mdc-theme-primary: var(--primary-color);
-        --mdc-theme-on-primary: var(--text-primary-color);
+        --mdc-theme-primary: #ff9800;
+        --mdc-theme-on-primary: #ffffff;
+        background: #ff9800 !important;
+        color: #ffffff !important;
+        border: 1px solid #ff9800 !important;
       }
 
       .scripts-info {
