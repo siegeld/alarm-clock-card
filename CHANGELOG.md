@@ -5,6 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.6] - 2025-07-12
+
+### 🌍 Translation Update
+
+#### New Language Support
+- **Slovenian Translation** - Complete Slovenian language support (Slovenščina)
+- **Enhanced Language Coverage** - Added 5th supported language for broader international usage
+
+#### Slovenian Translations
+- **Card Interface** - Budilka, Nastavi čas, Vključi budilko, Izključi budilko
+- **Status Messages** - IZKLOPLJENO, VKLOPLJENO, ZVONI, ODLOŽENO
+- **Day Names** - Ponedeljek, Torek, Sreda, Četrtek, Petek, Sobota, Nedelja
+- **Settings Menu** - Uporabi 24-urni format, Nastavitve
+- **Action Buttons** - Odloži, Ustavi
+
+### 🔧 Technical Details
+- **Language Code** - Uses `sl` for Slovenian language detection
+- **Automatic Detection** - Works with Home Assistant language preferences
+- **Fallback System** - Graceful fallback to English if translations missing
+
+---
+
 ## [2.0.5] - 2025-07-12
 
 ### 🌍 Internationalization
@@ -43,6 +65,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **German** (`de`) - Wecker, Zeit einstellen, Schlummern, etc.
 - **Spanish** (`es`) - Despertador, Establecer hora, Posponer, etc.
 - **French** (`fr`) - Réveil, Définir l'heure, Reporter, etc.
+- **Slovenian** (`sl`) - Budilka, Nastavi čas, Odloži, etc.
 
 ### 📝 Migration Notes
 - **No Configuration Required** - Languages work automatically

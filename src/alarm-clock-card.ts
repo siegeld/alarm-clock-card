@@ -438,7 +438,7 @@ export class AlarmClockCard extends LitElement implements LovelaceCard {
                 class="day-button ${isActive ? 'active' : ''}"
                 @click=${() => this._toggleDay(day)}
               >
-                ${this._translations.days[day as keyof typeof this._translations.days]}
+                ${this._getDayTranslation(day)}
               </mwc-button>
             `;
           }
@@ -667,6 +667,12 @@ export class AlarmClockCard extends LitElement implements LovelaceCard {
     // Safely get status translation with fallback
     const statusKey = status.toLowerCase() as keyof typeof this._translations.status;
     return this._translations.status[statusKey] || status.toUpperCase();
+  }
+
+  private _getDayTranslation(day: string): string {
+    // Safely get day translation with fallback
+    const dayKey = day.toLowerCase() as keyof typeof this._translations.days;
+    return this._translations.days[dayKey] || day.charAt(0).toUpperCase() + day.slice(1);
   }
 
   private _toggleSettingsMenu(): void {
@@ -1053,7 +1059,7 @@ window.customCards.push({
 });
 
 console.info(
-  `%c  ALARM-CLOCK-CARD  %c  Version 2.0.5  `,
+  `%c  ALARM-CLOCK-CARD  %c  Version 2.0.6  `,
   'color: orange; font-weight: bold; background: black',
   'color: white; font-weight: bold; background: dimgray'
 );

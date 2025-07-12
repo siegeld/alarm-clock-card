@@ -22,6 +22,7 @@ export declare class AlarmClockCard extends LitElement implements LovelaceCard {
     private config;
     private _showSettingsMenu;
     private entities;
+    private get _translations();
     setConfig(config: AlarmClockCardConfig): void;
     protected shouldUpdate(changedProps: PropertyValues): boolean;
     private _refreshEntityStates;
@@ -41,6 +42,8 @@ export declare class AlarmClockCard extends LitElement implements LovelaceCard {
     private _dismissAlarm;
     private _formatTime;
     private _formatTime12Hour;
+    private _getStatusTranslation;
+    private _getDayTranslation;
     private _toggleSettingsMenu;
     private _renderSettingsMenu;
     private _handleSettingsClick;
