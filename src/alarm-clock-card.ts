@@ -26,6 +26,7 @@ export interface AlarmClockCardConfig extends LovelaceCardConfig {
   show_scripts?: boolean;
   show_snooze_info?: boolean;
   use_24_hour_format?: boolean;
+  debug?: boolean;
   theme?: string;
   tap_action?: ActionConfig;
   hold_action?: ActionConfig;
@@ -68,6 +69,21 @@ export class AlarmClockCard extends LitElement implements LovelaceCard {
     return getTranslations(language);
   }
 
+  private _debug(message: string, ...args: any[]): void {
+    if (this.config?.debug) {
+      console.log(message, ...args);
+    }
+  }
+
+  private _debugError(message: string, ...args: any[]): void {
+    if (this.config?.debug) {
+      console.error(message, ...args);
+    } else {
+      // Always show errors but without debug prefix
+      console.error(message.replace('🔍 ALARM CARD: ', 'ALARM CARD: '), ...args);
+    }
+  }
+
   public setConfig(config: AlarmClockCardConfig): void {
     if (!config.device_id) {
       throw new Error('You need to define a device_id');
@@ -83,7 +99,7 @@ export class AlarmClockCard extends LitElement implements LovelaceCard {
   }
 
   protected shouldUpdate(changedProps: PropertyValues): boolean {
-    console.log('🔍 ALARM CARD: shouldUpdate called', {
+    this._debug('🔍 ALARM CARD: shouldUpdate called', {
       hasConfig: !!this.config,
       hasHass: !!this.hass,
       hasEntities: Object.keys(this.entities).length > 0,
@@ -91,17 +107,17 @@ export class AlarmClockCard extends LitElement implements LovelaceCard {
     });
 
     if (!this.config) {
-      console.log('🔍 ALARM CARD: No config, returning false');
+      this._debug('🔍 ALARM CARD: No config, returning false');
       return false;
     }
 
     // Initialize or refresh entity data when needed
     if (changedProps.has('hass') && this.hass && this.config) {
       if (Object.keys(this.entities).length === 0) {
-        console.log('🔍 ALARM CARD: No entities yet, calling _updateEntities');
+        this._debug('🔍 ALARM CARD: No entities yet, calling _updateEntities');
         this._updateEntities();
       } else {
-        console.log('🔍 ALARM CARD: Refreshing entity states');
+        this._debug('🔍 ALARM CARD: Refreshing entity states');
         this._refreshEntityStates();
       }
     }
@@ -122,7 +138,7 @@ export class AlarmClockCard extends LitElement implements LovelaceCard {
       if (entity && entity.entity_id) {
         const freshState = this.hass.states[entity.entity_id];
         if (freshState && (freshState.state !== entity.state || freshState.last_updated !== entity.last_updated)) {
-          console.log(`🔍 ALARM CARD: ${key} entity changed:`, entity.state, '→', freshState.state);
+          this._debug(`🔍 ALARM CARD: ${key} entity changed:`, entity.state, '→', freshState.state);
           (newEntities as any)[key] = freshState;
           hasChanges = true;
         }
@@ -135,7 +151,7 @@ export class AlarmClockCard extends LitElement implements LovelaceCard {
         if (dayEntity && dayEntity.entity_id) {
           const freshState = this.hass.states[dayEntity.entity_id];
           if (freshState && (freshState.state !== dayEntity.state || freshState.last_updated !== dayEntity.last_updated)) {
-            console.log(`🔍 ALARM CARD: Day ${day} entity changed:`, dayEntity.state, '→', freshState.state);
+            this._debug(`🔍 ALARM CARD: Day ${day} entity changed:`, dayEntity.state, '→', freshState.state);
             newEntities.days![day] = freshState;
             hasChanges = true;
           }
@@ -144,21 +160,21 @@ export class AlarmClockCard extends LitElement implements LovelaceCard {
     }
     
     if (hasChanges) {
-      console.log('🔍 ALARM CARD: Changes detected, updating entities object');
+      this._debug('🔍 ALARM CARD: Changes detected, updating entities object');
       this.entities = newEntities; // This should trigger Lit's reactivity
     }
   }
 
   private async _updateEntities(): Promise<void> {
     if (!this.hass || !this.config.device_id) {
-      console.error('🔍 ALARM CARD: Missing hass or device_id:', {
+      this._debugError('🔍 ALARM CARD: Missing hass or device_id:', {
         hass: !!this.hass,
         device_id: this.config.device_id
       });
       return;
     }
 
-    console.log('🔍 ALARM CARD: Looking for entities for device:', this.config.device_id);
+    this._debug('🔍 ALARM CARD: Looking for entities for device:', this.config.device_id);
 
     try {
       // Get entity registry to find entities for this device
@@ -166,14 +182,14 @@ export class AlarmClockCard extends LitElement implements LovelaceCard {
         type: 'config/entity_registry/list'
       }) as any[];
 
-      console.log('🔍 ALARM CARD: Entity registry loaded, total entities:', entityRegistry.length);
+      this._debug('🔍 ALARM CARD: Entity registry loaded, total entities:', entityRegistry.length);
 
       // Find entities that belong to this device
       const deviceEntities = entityRegistry.filter((entity: any) => 
         entity.device_id === this.config.device_id
       );
 
-      console.log('🔍 ALARM CARD: Found device entities:', deviceEntities.length, deviceEntities);
+      this._debug('🔍 ALARM CARD: Found device entities:', deviceEntities.length, deviceEntities);
 
       // First, find the coordinator's unique_id from the main entity
       // The main entity is the one that matches the basic pattern: alarm_clock_{entry_id}
@@ -188,13 +204,13 @@ export class AlarmClockCard extends LitElement implements LovelaceCard {
             regEntity.unique_id && 
             !regEntity.unique_id.includes('_')) {
           coordinatorUniqueId = regEntity.unique_id;
-          console.log('🔍 ALARM CARD: Found coordinator unique_id:', coordinatorUniqueId);
+          this._debug('🔍 ALARM CARD: Found coordinator unique_id:', coordinatorUniqueId);
           break;
         }
       }
 
       if (!coordinatorUniqueId) {
-        console.error('🔍 ALARM CARD: Could not find coordinator unique_id');
+        this._debugError('🔍 ALARM CARD: Could not find coordinator unique_id');
         this.entities = {};
         return;
       }
@@ -202,12 +218,12 @@ export class AlarmClockCard extends LitElement implements LovelaceCard {
       // Map entities by unique_id patterns (rename-proof!)
       const newEntities: typeof this.entities = { days: {} };
       
-      console.log('🔍 ALARM CARD: Processing device entities using unique_id patterns:');
+      this._debug('🔍 ALARM CARD: Processing device entities using unique_id patterns:');
       for (const regEntity of deviceEntities) {
-        console.log('🔍 ALARM CARD: Checking entity:', regEntity.entity_id, 'unique_id:', regEntity.unique_id);
+        this._debug('🔍 ALARM CARD: Checking entity:', regEntity.entity_id, 'unique_id:', regEntity.unique_id);
         
         if (!regEntity.unique_id) {
-          console.log('🔍 ALARM CARD: No unique_id found for:', regEntity.entity_id);
+          this._debug('🔍 ALARM CARD: No unique_id found for:', regEntity.entity_id);
           continue;
         }
         
@@ -216,22 +232,22 @@ export class AlarmClockCard extends LitElement implements LovelaceCard {
         
         // Use unique_id patterns instead of entity_id patterns
         if (uniqueId === coordinatorUniqueId) {
-          console.log('🔍 ALARM CARD: Found MAIN entity:', regEntity.entity_id);
+          this._debug('🔍 ALARM CARD: Found MAIN entity:', regEntity.entity_id);
           newEntities.main = entityState || { entity_id: regEntity.entity_id, state: 'unknown' };
         } else if (uniqueId === `${coordinatorUniqueId}_alarm_time`) {
-          console.log('🔍 ALARM CARD: Found TIME entity:', regEntity.entity_id);
+          this._debug('🔍 ALARM CARD: Found TIME entity:', regEntity.entity_id);
           newEntities.time = entityState || { entity_id: regEntity.entity_id, state: '07:00' };
         } else if (uniqueId === `${coordinatorUniqueId}_alarm_enabled`) {
-          console.log('🔍 ALARM CARD: Found MAIN ENABLED entity:', regEntity.entity_id);
+          this._debug('🔍 ALARM CARD: Found MAIN ENABLED entity:', regEntity.entity_id);
           newEntities.enabled = entityState || { entity_id: regEntity.entity_id, state: 'off' };
         } else if (uniqueId === `${coordinatorUniqueId}_alarm_status`) {
-          console.log('🔍 ALARM CARD: Found STATUS entity:', regEntity.entity_id);
+          this._debug('🔍 ALARM CARD: Found STATUS entity:', regEntity.entity_id);
           newEntities.status = entityState || { entity_id: regEntity.entity_id, state: 'off' };
         } else if (uniqueId === `${coordinatorUniqueId}_next_alarm`) {
-          console.log('🔍 ALARM CARD: Found NEXT_ALARM entity:', regEntity.entity_id);
+          this._debug('🔍 ALARM CARD: Found NEXT_ALARM entity:', regEntity.entity_id);
           newEntities.nextAlarm = entityState || { entity_id: regEntity.entity_id, state: null };
         } else if (uniqueId === `${coordinatorUniqueId}_time_until_alarm`) {
-          console.log('🔍 ALARM CARD: Found TIME_UNTIL entity:', regEntity.entity_id);
+          this._debug('🔍 ALARM CARD: Found TIME_UNTIL entity:', regEntity.entity_id);
           newEntities.timeUntil = entityState || { entity_id: regEntity.entity_id, state: null };
         } else if (uniqueId.startsWith(`${coordinatorUniqueId}_`) && uniqueId !== `${coordinatorUniqueId}_alarm_enabled`) {
           // Day switches: check if it ends with a day name
@@ -239,22 +255,22 @@ export class AlarmClockCard extends LitElement implements LovelaceCard {
           if (dayMatch && dayMatch[1] !== 'enabled') {
             const day = dayMatch[1];
             if (['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'].includes(day)) {
-              console.log('🔍 ALARM CARD: Found DAY entity:', regEntity.entity_id, day);
+              this._debug('🔍 ALARM CARD: Found DAY entity:', regEntity.entity_id, day);
               newEntities.days![day] = entityState || { entity_id: regEntity.entity_id, state: 'off' };
             }
           }
         } else {
-          console.log('🔍 ALARM CARD: Unmatched entity:', regEntity.entity_id, uniqueId);
+          this._debug('🔍 ALARM CARD: Unmatched entity:', regEntity.entity_id, uniqueId);
         }
       }
       
-      console.log('🔍 ALARM CARD: Final mapped entities:', newEntities);
-      console.log('🔍 ALARM CARD: Entity count - main:', !!newEntities.main, 'time:', !!newEntities.time, 'enabled:', !!newEntities.enabled, 'days:', Object.keys(newEntities.days || {}).length);
+      this._debug('🔍 ALARM CARD: Final mapped entities:', newEntities);
+      this._debug('🔍 ALARM CARD: Entity count - main:', !!newEntities.main, 'time:', !!newEntities.time, 'enabled:', !!newEntities.enabled, 'days:', Object.keys(newEntities.days || {}).length);
       
       this.entities = newEntities;
       
     } catch (error) {
-      console.error('🔍 ALARM CARD: Error loading entity registry:', error);
+      this._debugError('🔍 ALARM CARD: Error loading entity registry:', error);
       this.entities = {};
     }
   }
@@ -284,7 +300,7 @@ export class AlarmClockCard extends LitElement implements LovelaceCard {
     const status = mainEntity?.state || 'off';
     
     // Debug the status logic with fresh data
-    console.log('🔍 ALARM CARD: Status logic debug (FRESH DATA):', {
+    this._debug('🔍 ALARM CARD: Status logic debug (FRESH DATA):', {
       timeEntityId: this.entities.time?.entity_id,
       enabledEntityId: this.entities.enabled?.entity_id,
       mainEntityId: this.entities.main?.entity_id,
@@ -308,7 +324,7 @@ export class AlarmClockCard extends LitElement implements LovelaceCard {
       this.entities.days![day]?.state === 'on'
     );
 
-    console.log('🎯 ALARM CARD: Rendering with entity states:', {
+    this._debug('🎯 ALARM CARD: Rendering with entity states:', {
       alarmTime,
       isEnabled,
       status,
@@ -328,14 +344,13 @@ export class AlarmClockCard extends LitElement implements LovelaceCard {
             <div class="header-right">
               <div class="status ${status}">${this._getStatusTranslation(status)}</div>
               <div class="settings-menu">
-                <div 
+                <button 
                   class="settings-button"
                   @click=${this._toggleSettingsMenu}
                   title="Settings"
-                  style="background: red !important; color: white !important; width: 40px !important; height: 40px !important; display: flex !important; align-items: center !important; justify-content: center !important; cursor: pointer !important; border-radius: 50% !important; font-size: 20px !important;"
                 >
-                  ⚙
-                </div>
+                  ⋮
+                </button>
                 ${this._showSettingsMenu ? this._renderSettingsMenu() : ''}
               </div>
             </div>
@@ -520,13 +535,13 @@ export class AlarmClockCard extends LitElement implements LovelaceCard {
   }
 
   private _setAlarmTime(time: string): void {
-    console.log('⏰ ALARM CARD: Setting alarm time to:', time);
+    this._debug('⏰ ALARM CARD: Setting alarm time to:', time);
     if (!time || !this.config.device_id) {
-      console.error('⏰ ALARM CARD: Cannot set time - missing time or device_id:', { time, device_id: this.config.device_id });
+      console.error('ALARM CARD: Cannot set time - missing time or device_id:', { time, device_id: this.config.device_id });
       return;
     }
 
-    console.log('⏰ ALARM CARD: Calling alarm_clock.set_alarm service:', {
+    this._debug('⏰ ALARM CARD: Calling alarm_clock.set_alarm service:', {
       device_id: this.config.device_id,
       time: time,
     });
@@ -541,16 +556,16 @@ export class AlarmClockCard extends LitElement implements LovelaceCard {
   }
 
   private _toggleAlarm(): void {
-    console.log('🔘 ALARM CARD: Toggle alarm button clicked');
+    this._debug('🔘 ALARM CARD: Toggle alarm button clicked');
     if (!this.config.device_id || !this.hass) {
-      console.error('🔘 ALARM CARD: Cannot toggle alarm - no device_id found');
+      console.error('ALARM CARD: Cannot toggle alarm - no device_id found');
       return;
     }
 
     const isEnabled = this.entities.enabled?.state === 'on';
     const service = isEnabled ? 'turn_off' : 'turn_on';
     
-    console.log('🔘 ALARM CARD: Toggling alarm via switch:', {
+    this._debug('🔘 ALARM CARD: Toggling alarm via switch:', {
       device_id: this.config.device_id,
       currentEnabled: isEnabled,
       service,
@@ -565,22 +580,22 @@ export class AlarmClockCard extends LitElement implements LovelaceCard {
   }
 
   private async _toggleDay(day: string): Promise<void> {
-    console.log('📅 ALARM CARD: Toggle day clicked:', day);
+    this._debug('📅 ALARM CARD: Toggle day clicked:', day);
     if (!this.config.device_id) {
-      console.error('📅 ALARM CARD: Cannot toggle day - no device_id found:', day);
+      console.error('ALARM CARD: Cannot toggle day - no device_id found:', day);
       return;
     }
 
     const dayEntity = this.entities.days?.[day];
     if (!dayEntity) {
-      console.error('📅 ALARM CARD: Cannot toggle day - no day entity found:', day);
+      console.error('ALARM CARD: Cannot toggle day - no day entity found:', day);
       return;
     }
 
     const isEnabled = dayEntity.state === 'on';
     const service = isEnabled ? 'turn_off' : 'turn_on';
 
-    console.log('📅 ALARM CARD: Toggling day switch:', {
+    this._debug('📅 ALARM CARD: Toggling day switch:', {
       day,
       device_id: this.config.device_id,
       currentEnabled: isEnabled,
@@ -592,18 +607,18 @@ export class AlarmClockCard extends LitElement implements LovelaceCard {
     });
     
     // Force refresh after service call
-    console.log('📅 ALARM CARD: Service call completed, forcing refresh');
+    this._debug('📅 ALARM CARD: Service call completed, forcing refresh');
     setTimeout(() => this._refreshEntityStates(), 100);
   }
 
   private _snoozeAlarm(): void {
-    console.log('💤 ALARM CARD: Snooze button clicked');
+    this._debug('💤 ALARM CARD: Snooze button clicked');
     if (!this.config.device_id) {
-      console.error('💤 ALARM CARD: Cannot snooze - no device_id found');
+      console.error('ALARM CARD: Cannot snooze - no device_id found');
       return;
     }
 
-    console.log('💤 ALARM CARD: Calling snooze service:', this.config.device_id);
+    this._debug('💤 ALARM CARD: Calling snooze service:', this.config.device_id);
     this.hass.callService('alarm_clock', 'snooze', {
       device_id: this.config.device_id,
     });
@@ -613,13 +628,13 @@ export class AlarmClockCard extends LitElement implements LovelaceCard {
   }
 
   private _dismissAlarm(): void {
-    console.log('🛑 ALARM CARD: Dismiss button clicked');
+    this._debug('🛑 ALARM CARD: Dismiss button clicked');
     if (!this.config.device_id) {
-      console.error('🛑 ALARM CARD: Cannot dismiss - no device_id found');
+      console.error('ALARM CARD: Cannot dismiss - no device_id found');
       return;
     }
 
-    console.log('🛑 ALARM CARD: Calling dismiss service:', this.config.device_id);
+    this._debug('🛑 ALARM CARD: Calling dismiss service:', this.config.device_id);
     this.hass.callService('alarm_clock', 'dismiss', {
       device_id: this.config.device_id,
     });
