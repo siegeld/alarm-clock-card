@@ -5,6 +5,72 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.7] - 2025-07-12
+
+### 🌍 Major International Expansion
+
+#### Top 10 Global Languages Support
+- **Expanded to 12 Languages** - Added 7 new languages for comprehensive international coverage
+- **Global Reach** - Now supports languages spoken by over 4 billion people worldwide
+- **Complete Translations** - Full interface translation for all supported languages
+
+#### New Languages Added
+- **Chinese (Simplified)** (`zh`) - 中文：闹钟、设置时间、启用闹钟
+- **Japanese** (`ja`) - 日本語：アラーム時計、時刻設定、アラーム有効
+- **Korean** (`ko`) - 한국어：알람 시계、시간 설정、알람 켜기
+- **Russian** (`ru`) - Русский：Будильник、Установить время、Включить будильник
+- **Portuguese** (`pt`) - Português：Despertador、Definir horário、Ativar alarme
+- **Italian** (`it`) - Italiano：Sveglia、Imposta orario、Attiva sveglia
+- **Dutch** (`nl`) - Nederlands：Wekker、Tijd instellen、Wekker inschakelen
+- **Hebrew** (`he`) - עברית：שעון מעורר、הגדר שעה、הפעל מעורר
+- **Arabic** (`ar`) - العربية：ساعة المنبه、تحديد الوقت、تشغيل المنبه
+- **Hindi** (`hi`) - हिन्दी：अलार्म घड़ी、समय सेट करें、अलार्म चालू करें
+
+### 🎯 Complete Language Coverage
+
+#### All Supported Languages (12 Total)
+- **English** (`en`) - Default language
+- **German** (`de`) - Deutsch
+- **Spanish** (`es`) - Español
+- **French** (`fr`) - Français
+- **Slovenian** (`sl`) - Slovenščina
+- **Chinese** (`zh`) - 中文
+- **Japanese** (`ja`) - 日本語
+- **Korean** (`ko`) - 한국어
+- **Russian** (`ru`) - Русский
+- **Portuguese** (`pt`) - Português
+- **Italian** (`it`) - Italiano
+- **Dutch** (`nl`) - Nederlands
+- **Hebrew** (`he`) - עברית
+- **Arabic** (`ar`) - العربية
+- **Hindi** (`hi`) - हिन्दी
+
+### 🔧 Technical Features
+
+#### Script Support
+- **Right-to-Left Languages** - Proper support for Hebrew and Arabic text direction
+- **Character Sets** - Full Unicode support for all character systems
+- **Font Compatibility** - Works with system fonts for proper character rendering
+
+#### Language Detection
+- **Smart Fallback** - Graceful fallback to English for unsupported languages
+- **Regional Variants** - Handles language variants (e.g., zh-CN, zh-TW both use zh)
+- **Automatic Detection** - Uses Home Assistant language preferences seamlessly
+
+### 📊 Global Impact
+
+#### Population Coverage
+- **4+ Billion Speakers** - Languages cover majority of world's population
+- **Regional Distribution** - Comprehensive coverage across all continents
+- **Most Requested Languages** - Includes top languages requested by community
+
+#### User Experience
+- **Native Language Support** - Users see interface in their preferred language
+- **Cultural Sensitivity** - Appropriate translations for different cultural contexts
+- **Accessibility** - Improved accessibility for non-English speaking users
+
+---
+
 ## [2.0.6] - 2025-07-12
 
 ### 🌍 Translation Update

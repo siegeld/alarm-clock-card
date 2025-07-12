@@ -1059,7 +1059,7 @@ window.customCards.push({
 });
 
 console.info(
-  `%c  ALARM-CLOCK-CARD  %c  Version 2.0.6  `,
+  `%c  ALARM-CLOCK-CARD  %c  Version 2.0.7  `,
   'color: orange; font-weight: bold; background: black',
   'color: white; font-weight: bold; background: dimgray'
 );
