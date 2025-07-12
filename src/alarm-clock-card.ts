@@ -328,13 +328,14 @@ export class AlarmClockCard extends LitElement implements LovelaceCard {
             <div class="header-right">
               <div class="status ${status}">${this._getStatusTranslation(status)}</div>
               <div class="settings-menu">
-                <button 
+                <div 
                   class="settings-button"
                   @click=${this._toggleSettingsMenu}
                   title="Settings"
+                  style="background: red !important; color: white !important; width: 40px !important; height: 40px !important; display: flex !important; align-items: center !important; justify-content: center !important; cursor: pointer !important; border-radius: 50% !important; font-size: 20px !important;"
                 >
-                  •••
-                </button>
+                  ⚙
+                </div>
                 ${this._showSettingsMenu ? this._renderSettingsMenu() : ''}
               </div>
             </div>
