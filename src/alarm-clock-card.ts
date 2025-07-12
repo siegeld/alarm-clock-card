@@ -988,7 +988,10 @@ export class AlarmClockCard extends LitElement implements LovelaceCard {
       .day-button {
         --mdc-theme-primary: rgba(255, 255, 255, 0.1);
         --mdc-theme-on-primary: #ffffff;
+        --mdc-button-outline-width: 0 !important;
+        --mdc-outlined-button-outline-width: 0 !important;
         border: none !important;
+        outline: none !important;
         min-width: 40px;
         flex: 1;
         max-width: calc((100% - 30px) / 7);
@@ -1000,12 +1003,31 @@ export class AlarmClockCard extends LitElement implements LovelaceCard {
         border-radius: 8px !important;
       }
 
+      .day-button * {
+        border: none !important;
+        outline: none !important;
+      }
+
+      .day-button::before,
+      .day-button::after {
+        border: none !important;
+        outline: none !important;
+      }
+
       .day-button.active {
         --mdc-theme-primary: #ff9800;
         --mdc-theme-on-primary: #ffffff;
+        --mdc-button-outline-width: 0 !important;
+        --mdc-outlined-button-outline-width: 0 !important;
         background: #ff9800 !important;
         color: #ffffff !important;
         border: none !important;
+        outline: none !important;
+      }
+
+      .day-button.active * {
+        border: none !important;
+        outline: none !important;
       }
 
       .scripts-info {
@@ -1098,7 +1120,7 @@ window.customCards.push({
 });
 
 console.info(
-  `%c  ALARM-CLOCK-CARD  %c  Version 2.0.12  `,
+  `%c  ALARM-CLOCK-CARD  %c  Version 2.0.13  `,
   'color: orange; font-weight: bold; background: black',
   'color: white; font-weight: bold; background: dimgray'
 );
