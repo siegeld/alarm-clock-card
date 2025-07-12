@@ -362,46 +362,47 @@
         --mdc-theme-on-primary: #ffffff;
         --mdc-button-outline-width: 0 !important;
         --mdc-outlined-button-outline-width: 0 !important;
+        --mdc-button-outline-color: transparent !important;
+        --mdc-outlined-button-outline-color: transparent !important;
+        --mdc-button-disabled-outline-color: transparent !important;
+        --mdc-protected-button-container-color: rgba(255, 255, 255, 0.15) !important;
+        --mdc-filled-button-container-color: rgba(255, 255, 255, 0.15) !important;
+        --mdc-outlined-button-container-color: rgba(255, 255, 255, 0.15) !important;
+        --mdc-text-button-container-color: rgba(255, 255, 255, 0.15) !important;
         background: rgba(255, 255, 255, 0.15) !important;
         color: #ffffff !important;
         border: none !important;
         outline: none !important;
+        box-shadow: none !important;
         min-width: 40px;
         flex: 1;
         max-width: calc((100% - 30px) / 7);
         height: 36px;
         font-size: 11px;
-        padding: 0 6px;
-        box-sizing: border-box;
         font-weight: 500;
         border-radius: 8px !important;
-      }
-
-      .day-button * {
-        border: none !important;
-        outline: none !important;
-      }
-
-      .day-button::before,
-      .day-button::after {
-        border: none !important;
-        outline: none !important;
       }
 
       .day-button.active {
         --mdc-theme-primary: #ff9800;
         --mdc-theme-on-primary: #ffffff;
-        --mdc-button-outline-width: 0 !important;
-        --mdc-outlined-button-outline-width: 0 !important;
+        --mdc-protected-button-container-color: #ff9800 !important;
+        --mdc-filled-button-container-color: #ff9800 !important;
+        --mdc-outlined-button-container-color: #ff9800 !important;
+        --mdc-text-button-container-color: #ff9800 !important;
         background: #ff9800 !important;
         color: #ffffff !important;
         border: none !important;
         outline: none !important;
+        box-shadow: none !important;
       }
 
-      .day-button.active * {
+      .day-button::part(button),
+      .day-button::part(label),
+      .day-button::part(outline) {
         border: none !important;
         outline: none !important;
+        box-shadow: none !important;
       }
 
       .scripts-info {
@@ -473,7 +474,7 @@
           text-align: left;
         }
       }
-    `}};gt([dt({attribute:!1})],ft.prototype,"hass",void 0),gt([lt()],ft.prototype,"config",void 0),gt([lt()],ft.prototype,"_showSettingsMenu",void 0),gt([lt()],ft.prototype,"entities",void 0),ft=gt([at("alarm-clock-card")],ft),window.customCards=window.customCards||[],window.customCards.push({type:"alarm-clock-card",name:"Alarm Clock Card",description:"A card for displaying and controlling alarm clock entities",preview:!0,documentationURL:"https://github.com/siegeld/alarm-clock"}),console.info("%c  ALARM-CLOCK-CARD  %c  Version 2.0.15  ","color: orange; font-weight: bold; background: black","color: white; font-weight: bold; background: dimgray");var yt=function(t,e,i,s){var n,o=arguments.length,a=o<3?e:null===s?s=Object.getOwnPropertyDescriptor(e,i):s;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)a=Reflect.decorate(t,e,i,s);else for(var r=t.length-1;r>=0;r--)(n=t[r])&&(a=(o<3?n(a):o>3?n(e,i,a):n(e,i))||a);return o>3&&a&&Object.defineProperty(e,i,a),a};let vt=class extends nt{constructor(){super(...arguments),this._searchValue="",this._showDropdown=!1,this._filteredDevices=[],this._allDevices=[]}setConfig(t){this._config=t}get _device_id(){return this._config?.device_id||""}get _name(){return this._config?.name||""}get _show_time_picker(){return!1!==this._config?.show_time_picker}get _show_days(){return!1!==this._config?.show_days}get _show_scripts(){return!1!==this._config?.show_scripts}get _show_snooze_info(){return!1!==this._config?.show_snooze_info}get _use_24_hour_format(){return this._config?.use_24_hour_format||!1}render(){return this.hass&&this._config?N`
+    `}};gt([dt({attribute:!1})],ft.prototype,"hass",void 0),gt([lt()],ft.prototype,"config",void 0),gt([lt()],ft.prototype,"_showSettingsMenu",void 0),gt([lt()],ft.prototype,"entities",void 0),ft=gt([at("alarm-clock-card")],ft),window.customCards=window.customCards||[],window.customCards.push({type:"alarm-clock-card",name:"Alarm Clock Card",description:"A card for displaying and controlling alarm clock entities",preview:!0,documentationURL:"https://github.com/siegeld/alarm-clock"}),console.info("%c  ALARM-CLOCK-CARD  %c  Version 2.0.16  ","color: orange; font-weight: bold; background: black","color: white; font-weight: bold; background: dimgray");var yt=function(t,e,i,s){var n,o=arguments.length,a=o<3?e:null===s?s=Object.getOwnPropertyDescriptor(e,i):s;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)a=Reflect.decorate(t,e,i,s);else for(var r=t.length-1;r>=0;r--)(n=t[r])&&(a=(o<3?n(a):o>3?n(e,i,a):n(e,i))||a);return o>3&&a&&Object.defineProperty(e,i,a),a};let vt=class extends nt{constructor(){super(...arguments),this._searchValue="",this._showDropdown=!1,this._filteredDevices=[],this._allDevices=[]}setConfig(t){this._config=t}get _device_id(){return this._config?.device_id||""}get _name(){return this._config?.name||""}get _show_time_picker(){return!1!==this._config?.show_time_picker}get _show_days(){return!1!==this._config?.show_days}get _show_scripts(){return!1!==this._config?.show_scripts}get _show_snooze_info(){return!1!==this._config?.show_snooze_info}get _use_24_hour_format(){return this._config?.use_24_hour_format||!1}render(){return this.hass&&this._config?N`
       <div class="card-config">
         <div class="option">
           <label>Alarm Clock Device (Required)</label>

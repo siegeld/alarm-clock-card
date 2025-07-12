@@ -990,46 +990,47 @@ export class AlarmClockCard extends LitElement implements LovelaceCard {
         --mdc-theme-on-primary: #ffffff;
         --mdc-button-outline-width: 0 !important;
         --mdc-outlined-button-outline-width: 0 !important;
+        --mdc-button-outline-color: transparent !important;
+        --mdc-outlined-button-outline-color: transparent !important;
+        --mdc-button-disabled-outline-color: transparent !important;
+        --mdc-protected-button-container-color: rgba(255, 255, 255, 0.15) !important;
+        --mdc-filled-button-container-color: rgba(255, 255, 255, 0.15) !important;
+        --mdc-outlined-button-container-color: rgba(255, 255, 255, 0.15) !important;
+        --mdc-text-button-container-color: rgba(255, 255, 255, 0.15) !important;
         background: rgba(255, 255, 255, 0.15) !important;
         color: #ffffff !important;
         border: none !important;
         outline: none !important;
+        box-shadow: none !important;
         min-width: 40px;
         flex: 1;
         max-width: calc((100% - 30px) / 7);
         height: 36px;
         font-size: 11px;
-        padding: 0 6px;
-        box-sizing: border-box;
         font-weight: 500;
         border-radius: 8px !important;
-      }
-
-      .day-button * {
-        border: none !important;
-        outline: none !important;
-      }
-
-      .day-button::before,
-      .day-button::after {
-        border: none !important;
-        outline: none !important;
       }
 
       .day-button.active {
         --mdc-theme-primary: #ff9800;
         --mdc-theme-on-primary: #ffffff;
-        --mdc-button-outline-width: 0 !important;
-        --mdc-outlined-button-outline-width: 0 !important;
+        --mdc-protected-button-container-color: #ff9800 !important;
+        --mdc-filled-button-container-color: #ff9800 !important;
+        --mdc-outlined-button-container-color: #ff9800 !important;
+        --mdc-text-button-container-color: #ff9800 !important;
         background: #ff9800 !important;
         color: #ffffff !important;
         border: none !important;
         outline: none !important;
+        box-shadow: none !important;
       }
 
-      .day-button.active * {
+      .day-button::part(button),
+      .day-button::part(label),
+      .day-button::part(outline) {
         border: none !important;
         outline: none !important;
+        box-shadow: none !important;
       }
 
       .scripts-info {
@@ -1122,7 +1123,7 @@ window.customCards.push({
 });
 
 console.info(
-  `%c  ALARM-CLOCK-CARD  %c  Version 2.0.15  `,
+  `%c  ALARM-CLOCK-CARD  %c  Version 2.0.16  `,
   'color: orange; font-weight: bold; background: black',
   'color: white; font-weight: bold; background: dimgray'
 );
