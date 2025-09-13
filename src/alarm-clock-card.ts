@@ -399,12 +399,13 @@ export class AlarmClockCard extends LitElement implements LovelaceCard {
           lang="en-GB"
           @change=${this._onTimeInputChange}
         />
-        <button
+        <ha-button
           @click=${this._onSetTimeButtonClick}
-          class="action-button raised primary"
+          appearance="filled"
+          variant="brand"
         >
           ${this._translations.card.set_time}
-        </button>
+        </ha-button>
       </div>
     `;
   }
@@ -412,26 +413,29 @@ export class AlarmClockCard extends LitElement implements LovelaceCard {
   private _renderControls(isEnabled: boolean, status: string): TemplateResult {
     return html`
       <div class="controls">
-        <button
-          class="action-button raised ${isEnabled ? 'danger' : 'primary'}"
+        <ha-button
+          appearance="filled"
+          variant=${isEnabled ? 'danger' : 'brand'}
           @click=${this._toggleAlarm}
         >
           ${isEnabled ? this._translations.card.disable_alarm : this._translations.card.enable_alarm}
-        </button>
+        </ha-button>
         ${status === 'ringing'
           ? html`
-              <button
-                class="action-button outlined secondary"
+              <ha-button
+                appearance="outlined"
+                variant="neutral"
                 @click=${this._snoozeAlarm}
               >
                 ${this._translations.card.snooze}
-              </button>
-              <button
-                class="action-button raised danger"
+              </ha-button>
+              <ha-button
+                appearance="filled"
+                variant="danger"
                 @click=${this._dismissAlarm}
               >
                 ${this._translations.card.dismiss}
-              </button>
+              </ha-button>
             `
           : html``}
       </div>
@@ -943,88 +947,9 @@ export class AlarmClockCard extends LitElement implements LovelaceCard {
         color: var(--primary-text-color);
       }
 
-      .action-button {
+      ha-button {
         flex: 1;
         min-width: 120px;
-        padding: 12px 24px;
-        border-radius: 4px;
-        font-size: 14px;
-        font-weight: 500;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        cursor: pointer;
-        border: none;
-        transition: all 0.2s ease;
-        background: transparent;
-        color: var(--primary-text-color);
-        position: relative;
-        overflow: hidden;
-        font-family: inherit;
-      }
-
-      .action-button.raised {
-        box-shadow: 0 3px 1px -2px rgba(0,0,0,.2),
-                    0 2px 2px 0 rgba(0,0,0,.14),
-                    0 1px 5px 0 rgba(0,0,0,.12);
-      }
-
-      .action-button.raised:hover {
-        box-shadow: 0 2px 4px -1px rgba(0,0,0,.2),
-                    0 4px 5px 0 rgba(0,0,0,.14),
-                    0 1px 10px 0 rgba(0,0,0,.12);
-      }
-
-      .action-button.raised:active {
-        box-shadow: 0 5px 5px -3px rgba(0,0,0,.2),
-                    0 8px 10px 1px rgba(0,0,0,.14),
-                    0 3px 14px 2px rgba(0,0,0,.12);
-      }
-
-      .action-button.outlined {
-        border: 1px solid var(--divider-color);
-        background: transparent;
-      }
-
-      .action-button.outlined:hover {
-        background: rgba(255, 255, 255, 0.05);
-      }
-
-      .action-button.primary {
-        background: var(--primary-color);
-        color: var(--text-primary-color, white);
-      }
-
-      .action-button.primary.outlined {
-        background: transparent;
-        color: var(--primary-color);
-        border-color: var(--primary-color);
-      }
-
-      .action-button.secondary {
-        background: var(--secondary-background-color);
-        color: var(--primary-text-color);
-      }
-
-      .action-button.secondary.outlined {
-        background: transparent;
-        color: var(--secondary-text-color);
-        border-color: var(--secondary-text-color);
-      }
-
-      .action-button.danger {
-        background: var(--error-color);
-        color: white;
-      }
-
-      .action-button.danger.outlined {
-        background: transparent;
-        color: var(--error-color);
-        border-color: var(--error-color);
-      }
-
-      .action-button:disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
       }
 
       .controls {
