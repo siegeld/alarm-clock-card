@@ -359,10 +359,10 @@ export class AlarmClockCard extends LitElement implements LovelaceCard {
 
           <div class="time-display">
             <div class="alarm-time">${alarmTime}</div>
-            ${nextAlarm && nextAlarmDay
+            ${isEnabled && nextAlarm && nextAlarmDay
               ? html`<div class="next-alarm">${this._translations.card.next_alarm}: ${nextAlarmDay} at ${this._formatTime(new Date(nextAlarm).toTimeString().substring(0, 5))}</div>`
               : html``}
-            ${timeUntil
+            ${isEnabled && timeUntil
               ? html`
                   <div class="countdown">
                     <span class="countdown-label">

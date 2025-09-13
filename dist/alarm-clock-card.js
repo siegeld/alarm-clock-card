@@ -27,8 +27,8 @@
 
           <div class="time-display">
             <div class="alarm-time">${n}</div>
-            ${l&&c?N`<div class="next-alarm">${this._translations.card.next_alarm}: ${c} at ${this._formatTime(new Date(l).toTimeString().substring(0,5))}</div>`:N``}
-            ${h?N`
+            ${o&&l&&c?N`<div class="next-alarm">${this._translations.card.next_alarm}: ${c} at ${this._formatTime(new Date(l).toTimeString().substring(0,5))}</div>`:N``}
+            ${o&&h?N`
                   <div class="countdown">
                     <span class="countdown-label">
                       ${"snooze"===u?this._translations.card.snooze_ends_in:this._translations.card.alarm_in}
