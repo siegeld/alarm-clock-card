@@ -8,7 +8,7 @@ import {
 } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { fireEvent, LovelaceCardEditor, LovelaceCard } from 'custom-card-helpers';
-import '@material/mwc-button';
+import './mwc-loader';
 
 import type {
   HomeAssistant,
@@ -400,6 +400,7 @@ export class AlarmClockCard extends LitElement implements LovelaceCard {
           @change=${this._onTimeInputChange}
         />
         <mwc-button
+          raised
           @click=${this._onSetTimeButtonClick}
           class="set-time-button"
         >

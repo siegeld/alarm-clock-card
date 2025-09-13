@@ -23,6 +23,6 @@ module.exports = {
   optimization: {
     minimize: true,
   },
-  // Bundle all dependencies including lit
+  // Bundle all dependencies including lit and MWC
   externals: {},
 };
