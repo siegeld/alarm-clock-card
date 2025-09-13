@@ -8,7 +8,7 @@ import {
 } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { fireEvent, LovelaceCardEditor, LovelaceCard } from 'custom-card-helpers';
-import './mwc-loader';
+// Note: mwc-button is provided by Home Assistant, no import needed
 
 import type {
   HomeAssistant,
