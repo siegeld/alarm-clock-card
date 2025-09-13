@@ -5,7 +5,7 @@
             ${this.config?`Device not available: ${this.config.device_id}`:"No configuration"}
           </div>
         </ha-card>
-      `;const t=this.entities.time?.entity_id?this.hass.states[this.entities.time.entity_id]:null,e=this.entities.enabled?.entity_id?this.hass.states[this.entities.enabled.entity_id]:null,i=this.entities.main?.entity_id?this.hass.states[this.entities.main.entity_id]:null,s=t?.state||"07:00",n=this._formatTime(s),a="on"===e?.state,o=i?.state||"off";this._debug("🔍 ALARM CARD: Status logic debug (FRESH DATA):",{timeEntityId:this.entities.time?.entity_id,enabledEntityId:this.entities.enabled?.entity_id,mainEntityId:this.entities.main?.entity_id,enabledEntityFreshState:e?.state,mainEntityFreshState:i?.state,isEnabled:a,finalStatus:o});const r=this.entities.nextAlarm?.attributes||{},d=this.entities.timeUntil?.attributes||{},l=this.entities.nextAlarm?.state,c=a&&l&&"unavailable"!==l&&"unknown"!==l?l:null,h=a?r.next_alarm_day:null,u=d.human_readable,_=a&&u&&"unavailable"!==u&&"unknown"!==u?u:null,m=d.countdown_type,g=Object.keys(this.entities.days||{}).filter(t=>"on"===this.entities.days[t]?.state);return this._debug("🎯 ALARM CARD: Rendering with entity states:",{alarmTime:n,isEnabled:a,status:o,nextAlarm:c,nextAlarmDay:h,timeUntil:_,countdownType:m,enabledDays:g,entities:this.entities}),N`
+      `;const t=this.entities.time?.entity_id?this.hass.states[this.entities.time.entity_id]:null,e=this.entities.enabled?.entity_id?this.hass.states[this.entities.enabled.entity_id]:null,i=this.entities.main?.entity_id?this.hass.states[this.entities.main.entity_id]:null,s=t?.state||"07:00",n=this._formatTime(s),a="on"===e?.state,o=i?.state||"off";this._debug("🔍 ALARM CARD: Status logic debug (FRESH DATA):",{timeEntityId:this.entities.time?.entity_id,enabledEntityId:this.entities.enabled?.entity_id,mainEntityId:this.entities.main?.entity_id,enabledEntityFreshState:e?.state,mainEntityFreshState:i?.state,isEnabled:a,finalStatus:o});const r=this.entities.nextAlarm?.entity_id?this.hass.states[this.entities.nextAlarm.entity_id]:null,d=this.entities.timeUntil?.entity_id?this.hass.states[this.entities.timeUntil.entity_id]:null,l=a&&r?.state&&"unavailable"!==r.state&&"unknown"!==r.state?r.state:null,c=a&&r?.attributes?.next_alarm_day?r.attributes.next_alarm_day:null,h=a&&d?.attributes?.human_readable?d.attributes.human_readable:null,u=d?.attributes?.countdown_type,_=Object.keys(this.entities.days||{}).filter(t=>"on"===this.entities.days[t]?.state);return this._debug("🎯 ALARM CARD: Rendering with entity states:",{alarmTime:n,isEnabled:a,status:o,nextAlarm:l,nextAlarmDay:c,timeUntil:h,countdownType:u,enabledDays:_,entities:this.entities}),N`
       <ha-card @click=${this._handleCardClick}>
         <div class="card-content">
           <div class="header">
@@ -27,20 +27,20 @@
 
           <div class="time-display">
             <div class="alarm-time">${n}</div>
-            ${c&&h?N`<div class="next-alarm">${this._translations.card.next_alarm}: ${h} at ${this._formatTime(new Date(c).toTimeString().substring(0,5))}</div>`:N``}
-            ${_?N`
+            ${l&&c?N`<div class="next-alarm">${this._translations.card.next_alarm}: ${c} at ${this._formatTime(new Date(l).toTimeString().substring(0,5))}</div>`:N``}
+            ${h?N`
                   <div class="countdown">
                     <span class="countdown-label">
-                      ${"snooze"===m?this._translations.card.snooze_ends_in:this._translations.card.alarm_in}
+                      ${"snooze"===u?this._translations.card.snooze_ends_in:this._translations.card.alarm_in}
                     </span>
-                    <span class="countdown-time">${_}</span>
+                    <span class="countdown-time">${h}</span>
                   </div>
                 `:N``}
           </div>
 
           ${this.config.show_time_picker?this._renderTimePicker():N``}
           ${this._renderControls(a,o)}
-          ${this.config.show_days?this._renderDays(g):N``}
+          ${this.config.show_days?this._renderDays(_):N``}
           ${this.config.show_snooze_info&&"snoozed"===o?this._renderSnoozeInfo():N``}
         </div>
       </ha-card>
@@ -111,10 +111,10 @@
             </div>
           `)}
       </div>
-    `}_renderSnoozeInfo(){const t=this.entities.timeUntil?.attributes||{},e=t.snooze_count||0,i=this.entities.main?.attributes?.max_snoozes||3,s=t.snooze_until;return N`
+    `}_renderSnoozeInfo(){const t=this.entities.timeUntil?.entity_id?this.hass.states[this.entities.timeUntil.entity_id]:null,e=this.entities.main?.entity_id?this.hass.states[this.entities.main.entity_id]:null,i=t?.attributes?.snooze_count||0,s=e?.attributes?.max_snoozes||3,n=t?.attributes?.snooze_until;return N`
       <div class="snooze-info">
-        <div>${this._translations.card.snoozed} (${e}/${i})</div>
-        ${s?N`<div>${this._translations.card.until}: ${this._formatTime(new Date(s).toTimeString().substring(0,5))}</div>`:N``}
+        <div>${this._translations.card.snoozed} (${i}/${s})</div>
+        ${n?N`<div>${this._translations.card.until}: ${this._formatTime(new Date(n).toTimeString().substring(0,5))}</div>`:N``}
       </div>
     `}_onTimeInputChange(t){}_onSetTimeButtonClick(t){const e=this.shadowRoot?.querySelector("#alarm-time-input");if(e){const t=e.value;this._setAlarmTime(t)}}_setAlarmTime(t){this._debug("⏰ ALARM CARD: Setting alarm time to:",t),t&&this.config.device_id?(this._debug("⏰ ALARM CARD: Calling alarm_clock.set_alarm service:",{device_id:this.config.device_id,time:t}),this.hass.callService("alarm_clock","set_alarm",{device_id:this.config.device_id,time:t}),setTimeout(()=>this._refreshEntityStates(),100)):this._debugError("ALARM CARD: Cannot set time - missing time or device_id:",{time:t,device_id:this.config.device_id})}_toggleAlarm(){if(this._debug("🔘 ALARM CARD: Toggle alarm button clicked"),!this.config.device_id||!this.hass)return void this._debugError("ALARM CARD: Cannot toggle alarm - no device_id found");const t="on"===this.entities.enabled?.state,e=t?"turn_off":"turn_on";this._debug("🔘 ALARM CARD: Toggling alarm via switch:",{device_id:this.config.device_id,currentEnabled:t,service:e}),this.hass.callService("switch",e,{entity_id:this.entities.enabled?.entity_id}),setTimeout(()=>this._refreshEntityStates(),100)}async _toggleDay(t){if(this._debug("📅 ALARM CARD: Toggle day clicked:",t),!this.config.device_id)return void this._debugError("ALARM CARD: Cannot toggle day - no device_id found:",t);const e=this.entities.days?.[t];if(!e)return void this._debugError("ALARM CARD: Cannot toggle day - no day entity found:",t);const i="on"===e.state,s=i?"turn_off":"turn_on";this._debug("📅 ALARM CARD: Toggling day switch:",{day:t,device_id:this.config.device_id,currentEnabled:i,service:s}),await this.hass.callService("switch",s,{entity_id:e.entity_id}),this._debug("📅 ALARM CARD: Service call completed, forcing refresh"),setTimeout(()=>this._refreshEntityStates(),100)}_snoozeAlarm(){this._debug("💤 ALARM CARD: Snooze button clicked"),this.config.device_id?(this._debug("💤 ALARM CARD: Calling snooze service:",this.config.device_id),this.hass.callService("alarm_clock","snooze",{device_id:this.config.device_id}),setTimeout(()=>this._refreshEntityStates(),100)):this._debugError("ALARM CARD: Cannot snooze - no device_id found")}_dismissAlarm(){this._debug("🛑 ALARM CARD: Dismiss button clicked"),this.config.device_id?(this._debug("🛑 ALARM CARD: Calling dismiss service:",this.config.device_id),this.hass.callService("alarm_clock","dismiss",{device_id:this.config.device_id}),setTimeout(()=>this._refreshEntityStates(),100)):this._debugError("ALARM CARD: Cannot dismiss - no device_id found")}_formatTime(t){return t&&"off"!==t?this.config.use_24_hour_format?t:this._formatTime12Hour(t):t}_formatTime12Hour(t){if(!t||"off"===t)return t;try{const[e,i]=t.split(":"),s=parseInt(e,10),n=parseInt(i,10),a=s>=12?"PM":"AM";return`${0===s?12:s>12?s-12:s}:${n.toString().padStart(2,"0")} ${a}`}catch(e){return t}}_getStatusTranslation(t){const e=t.toLowerCase();return this._translations.status[e]||t.toUpperCase()}_getDayTranslation(t){const e={monday:"mon",tuesday:"tue",wednesday:"wed",thursday:"thu",friday:"fri",saturday:"sat",sunday:"sun"}[t.toLowerCase()]||t.toLowerCase();return this._translations.days[e]||t.charAt(0).toUpperCase()+t.slice(1)}_toggleSettingsMenu(){this._showSettingsMenu=!this._showSettingsMenu}_renderSettingsMenu(){return N`
       <div class="settings-dropdown" @click=${this._handleSettingsClick}>

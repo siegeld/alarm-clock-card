@@ -311,17 +311,18 @@ export class AlarmClockCard extends LitElement implements LovelaceCard {
       finalStatus: status,
     });
     
-    // Get additional data from sensor entities
-    const nextAlarmAttrs = this.entities.nextAlarm?.attributes || {};
-    const timeUntilAttrs = this.entities.timeUntil?.attributes || {};
+    // Get fresh sensor data from hass.states
+    const nextAlarmEntity = this.entities.nextAlarm?.entity_id ? this.hass.states[this.entities.nextAlarm.entity_id] : null;
+    const timeUntilEntity = this.entities.timeUntil?.entity_id ? this.hass.states[this.entities.timeUntil.entity_id] : null;
 
-    // Only use sensor data if alarm is enabled and sensors have valid values
-    const nextAlarmState = this.entities.nextAlarm?.state;
-    const nextAlarm = (isEnabled && nextAlarmState && nextAlarmState !== 'unavailable' && nextAlarmState !== 'unknown') ? nextAlarmState : null;
-    const nextAlarmDay = isEnabled ? nextAlarmAttrs.next_alarm_day : null;
-    const timeUntilState = timeUntilAttrs.human_readable;
-    const timeUntil = (isEnabled && timeUntilState && timeUntilState !== 'unavailable' && timeUntilState !== 'unknown') ? timeUntilState : null;
-    const countdownType = timeUntilAttrs.countdown_type;
+    // Only show next alarm and countdown if alarm is enabled
+    const nextAlarm = (isEnabled && nextAlarmEntity?.state && nextAlarmEntity.state !== 'unavailable' && nextAlarmEntity.state !== 'unknown')
+      ? nextAlarmEntity.state : null;
+    const nextAlarmDay = (isEnabled && nextAlarmEntity?.attributes?.next_alarm_day)
+      ? nextAlarmEntity.attributes.next_alarm_day : null;
+    const timeUntil = (isEnabled && timeUntilEntity?.attributes?.human_readable)
+      ? timeUntilEntity.attributes.human_readable : null;
+    const countdownType = timeUntilEntity?.attributes?.countdown_type;
     
     // Get day states
     const enabledDays = Object.keys(this.entities.days || {}).filter(day => 
@@ -510,10 +511,11 @@ export class AlarmClockCard extends LitElement implements LovelaceCard {
   }
 
   private _renderSnoozeInfo(): TemplateResult {
-    const timeUntilAttrs = this.entities.timeUntil?.attributes || {};
-    const snoozeCount = timeUntilAttrs.snooze_count || 0;
-    const maxSnoozes = this.entities.main?.attributes?.max_snoozes || 3;
-    const snoozeUntil = timeUntilAttrs.snooze_until;
+    const timeUntilEntity = this.entities.timeUntil?.entity_id ? this.hass.states[this.entities.timeUntil.entity_id] : null;
+    const mainEntity = this.entities.main?.entity_id ? this.hass.states[this.entities.main.entity_id] : null;
+    const snoozeCount = timeUntilEntity?.attributes?.snooze_count || 0;
+    const maxSnoozes = mainEntity?.attributes?.max_snoozes || 3;
+    const snoozeUntil = timeUntilEntity?.attributes?.snooze_until;
     
     return html`
       <div class="snooze-info">
