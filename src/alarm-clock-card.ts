@@ -314,10 +314,13 @@ export class AlarmClockCard extends LitElement implements LovelaceCard {
     // Get additional data from sensor entities
     const nextAlarmAttrs = this.entities.nextAlarm?.attributes || {};
     const timeUntilAttrs = this.entities.timeUntil?.attributes || {};
-    
-    const nextAlarm = this.entities.nextAlarm?.state;
-    const nextAlarmDay = nextAlarmAttrs.next_alarm_day;
-    const timeUntil = timeUntilAttrs.human_readable;
+
+    // Only use sensor data if alarm is enabled and sensors have valid values
+    const nextAlarmState = this.entities.nextAlarm?.state;
+    const nextAlarm = (isEnabled && nextAlarmState && nextAlarmState !== 'unavailable' && nextAlarmState !== 'unknown') ? nextAlarmState : null;
+    const nextAlarmDay = isEnabled ? nextAlarmAttrs.next_alarm_day : null;
+    const timeUntilState = timeUntilAttrs.human_readable;
+    const timeUntil = (isEnabled && timeUntilState && timeUntilState !== 'unavailable' && timeUntilState !== 'unknown') ? timeUntilState : null;
     const countdownType = timeUntilAttrs.countdown_type;
     
     // Get day states
@@ -359,10 +362,10 @@ export class AlarmClockCard extends LitElement implements LovelaceCard {
 
           <div class="time-display">
             <div class="alarm-time">${alarmTime}</div>
-            ${isEnabled && nextAlarm && nextAlarmDay
+            ${nextAlarm && nextAlarmDay
               ? html`<div class="next-alarm">${this._translations.card.next_alarm}: ${nextAlarmDay} at ${this._formatTime(new Date(nextAlarm).toTimeString().substring(0, 5))}</div>`
               : html``}
-            ${isEnabled && timeUntil
+            ${timeUntil
               ? html`
                   <div class="countdown">
                     <span class="countdown-label">
