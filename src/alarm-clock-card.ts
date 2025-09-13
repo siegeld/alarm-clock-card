@@ -8,6 +8,7 @@ import {
 } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { fireEvent, LovelaceCardEditor, LovelaceCard } from 'custom-card-helpers';
+import '@material/mwc-button';
 
 import type {
   HomeAssistant,

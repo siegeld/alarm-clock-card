@@ -1,5 +1,6 @@
 import { LitElement, CSSResultGroup, TemplateResult, PropertyValues } from 'lit';
 import { LovelaceCardEditor, LovelaceCard } from 'custom-card-helpers';
+import '@material/mwc-button';
 import type { HomeAssistant, LovelaceCardConfig, ActionConfig } from 'custom-card-helpers';
 export interface AlarmClockCardConfig extends LovelaceCardConfig {
     type: string;
